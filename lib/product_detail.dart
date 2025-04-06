@@ -190,7 +190,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             backgroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
@@ -212,7 +212,7 @@ class _ProductDetailState extends State<ProductDetail> {
                             backgroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(0),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           child: const Text(
