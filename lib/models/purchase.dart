@@ -1,57 +1,44 @@
+import 'package:flutter_buybye/models/product.dart';
+
 import 'cart_item.dart';
 
 class Purchase {
-  final String id;
-  final List<CartItem> items;
-  final DateTime purchaseDate;
-  final int totalAmount;
-  final String status; // 'pending', 'completed', 'cancelled'
+  final Product product;
+  int quantity;
 
   Purchase({
-    required this.id,
-    required this.items,
-    required this.purchaseDate,
-    required this.totalAmount,
-    this.status = 'pending',
+    required this.product,
+    this.quantity = 1,
   });
 
-  int get itemCount => items.length;
+  static List<Purchase> getDefaultItems() {
+    return [
+      Purchase(
+        product: Product.fromType(ProductType.product1),
+        quantity: 1,
+      ),
+      Purchase(
+        product: Product.fromType(ProductType.product2),
+        quantity: 2,
+      ),
+      Purchase(
+        product: Product.fromType(ProductType.product3),
+        quantity: 1,
+      ),
+    ];
+  }
 
-  Map<String, dynamic> toJson() {
+    Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'items': items.map((item) => item.toJson()).toList(),
-      'purchaseDate': purchaseDate.toIso8601String(),
-      'totalAmount': totalAmount,
-      'status': status,
+      'product': product.toJson(),
+      'quantity': quantity,
     };
   }
 
   factory Purchase.fromJson(Map<String, dynamic> json) {
     return Purchase(
-      id: json['id'],
-      items: (json['items'] as List)
-          .map((item) => CartItem.fromJson(item))
-          .toList(),
-      purchaseDate: DateTime.parse(json['purchaseDate']),
-      totalAmount: json['totalAmount'],
-      status: json['status'],
-    );
-  }
-
-  Purchase copyWith({
-    String? id,
-    List<CartItem>? items,
-    DateTime? purchaseDate,
-    int? totalAmount,
-    String? status,
-  }) {
-    return Purchase(
-      id: id ?? this.id,
-      items: items ?? this.items,
-      purchaseDate: purchaseDate ?? this.purchaseDate,
-      totalAmount: totalAmount ?? this.totalAmount,
-      status: status ?? this.status,
+      product: Product.fromJson(json['product']),
+      quantity: json['quantity'],
     );
   }
 } 
