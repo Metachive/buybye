@@ -1,34 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'models/product.dart';
 
-class ProductDetailPage extends StatelessWidget {
+class ProductDetail extends StatefulWidget {
   final String productId;
 
-  const ProductDetailPage({
+  const ProductDetail({
     super.key,
     required this.productId,
   });
 
   @override
-  Widget build(BuildContext context) {
-    // Find the product type by ID
-    final productType = ProductType.values.firstWhere(
-      (type) => type.id == productId,
-      orElse: () => throw Exception('Product not found'),
-    );
+  State<ProductDetail> createState() => _ProductDetailState();
+}
 
-    // Create a Product instance from the type
-    final product = Product.fromType(productType);
+class _ProductDetailState extends State<ProductDetail> {
+  int quantity = 1;
+
+  void updateQuantity(int newQuantity) {
+    setState(() {
+      quantity = newQuantity;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final product = Product.fromType(
+      ProductType.values.firstWhere((type) => type.id == widget.productId),
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.name),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 100,
+              width: 100,
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Image.asset(
+              'assets/images/list.png',
+              width: 30,
+              height: 30,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(
+                child: Text(
+                  '상품 상세',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
             Image.asset(
               product.imagePath,
               width: double.infinity,
@@ -36,29 +75,152 @@ class ProductDetailPage extends StatelessWidget {
               fit: BoxFit.cover,
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Product Name
                   Text(
                     product.name,
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  // Product Price
                   Text(
-                    '${product.price.toString()}원',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    '${NumberFormat('#,###').format(product.price)}원',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  // Product Description
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.remove, size: 16),
+                          padding: EdgeInsets.zero,
+                          onPressed: quantity > 0
+                              ? () => updateQuantity(quantity - 1)
+                              : null,
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        width: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Text(
+                          quantity.toString(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.add, size: 16),
+                          padding: EdgeInsets.zero,
+                          onPressed: () => updateQuantity(quantity + 1),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (quantity > 0) ...[
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Text(
+                            '합계 ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Text(
+                            '${NumberFormat('#,###').format(product.price * quantity)}원',
+                            style: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // TODO: Implement add to cart functionality
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                          ),
+                          child: const Text(
+                            '장바구니에 담기',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // TODO: Implement buy now functionality
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                          ),
+                          child: const Text(
+                            '구매하기',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
                   Text(
                     product.description,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
                   ),
                 ],
               ),
@@ -66,27 +228,7 @@ class ProductDetailPage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              // TODO: Implement add to cart functionality
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-            child: const Text(
-              '장바구니에 담기',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
+      bottomNavigationBar: null,
     );
   }
 } 

@@ -62,7 +62,7 @@ class Homepage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailPage(
+                        builder: (context) => ProductDetail(
                           productId: productType.id,
                         ),
                       ),
@@ -72,7 +72,7 @@ class Homepage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       AspectRatio(
-                        aspectRatio: 1.0,
+                        aspectRatio: 1.2,
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey.shade300),
