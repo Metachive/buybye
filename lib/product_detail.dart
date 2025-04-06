@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/shopping_cart.dart';
 import 'package:intl/intl.dart';
 import 'models/product.dart';
 import 'widgets/common_app_bar.dart';
@@ -98,7 +99,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: IconButton(
                           icon: const Icon(Icons.remove, size: 16),
                           padding: EdgeInsets.zero,
-                          onPressed: quantity > 0
+                          onPressed: quantity > 1
                               ? () => updateQuantity(quantity - 1)
                               : null,
                         ),
@@ -164,7 +165,31 @@ class _ProductDetailState extends State<ProductDetail> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Implement add to cart functionality
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('알림'),
+                                  content: const Text('장바구니에 상품이 담겼습니다.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close the dialog
+                                      },
+                                      child: const Text('계속 쇼핑'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close the dialog
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart()));
+                                      },
+                                      child: const Text('장바구니로 이동'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -186,7 +211,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Implement buy now functionality
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
