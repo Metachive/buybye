@@ -61,4 +61,26 @@ class Product {
           (Match m) => '${m[1]},'
         )}원';
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'imagePath': imagePath,
+      'price': price,
+      'description': description,
+    };
+
+  }
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'],
+      name: json['name'],
+      imagePath: json['imagePath'],
+      price: json['price'],
+      description: json['description'],
+    );
+
+  }
 } 

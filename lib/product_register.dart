@@ -102,66 +102,118 @@ class _ProductRegisterState extends State<ProductRegister> {
                     ),
                     const SizedBox(height: 24),
                     // 상품명 입력
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          child: Text(
-                            '상품명',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: Text(
+                              '상품명',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _nameController,
-                            decoration: const InputDecoration(
-                              hintText: '상품명을 입력하세요',
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _nameController,
+                              decoration: const InputDecoration(
+                                hintText: '상품명을 입력하세요',
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                isDense: true,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                              ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                              isDense: true,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '상품명을 입력해주세요';
+                                }
+                                return null;
+                              },
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '상품명을 입력해주세요';
-                              }
-                              return null;
-                            },
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 16),
                     // 가격 입력
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 80,
-                          child: Text(
-                            '가격',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                            child: Text(
+                              '가격',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              controller: _priceController,
+                              decoration: const InputDecoration(
+                                hintText: '가격을 입력하세요',
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                isDense: true,
+                                suffixText: '원',
+                              ),
+                              keyboardType: TextInputType.number,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '가격을 입력해주세요';
+                                }
+                                if (int.tryParse(value) == null) {
+                                  return '숫자만 입력해주세요';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // 상품 설명 입력
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '상품 설명',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _priceController,
+                          const SizedBox(height: 30),
+                          TextFormField(
+                            controller: _descriptionController,
                             decoration: const InputDecoration(
-                              hintText: '가격을 입력하세요',
+                              hintText: '상품 설명을 입력하세요',
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey, width: 0.5),
                               ),
@@ -171,61 +223,24 @@ class _ProductRegisterState extends State<ProductRegister> {
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey, width: 0.5),
                               ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                              isDense: true,
-                              suffixText: '원',
+                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                             ),
-                            keyboardType: TextInputType.number,
+                            maxLines: 5,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return '가격을 입력해주세요';
-                              }
-                              if (int.tryParse(value) == null) {
-                                return '숫자만 입력해주세요';
+                                return '상품 설명을 입력해주세요';
                               }
                               return null;
                             },
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    // 상품 설명 입력
-                    const Text(
-                      '상품 설명',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        hintText: '상품 설명을 입력하세요',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey, width: 0.5),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                      maxLines: 5,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '상품 설명을 입력해주세요';
-                        }
-                        return null;
-                      },
                     ),
                     const SizedBox(height: 32),
                     // 등록 버튼
-                    SizedBox(
+                    Container(
                       width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -238,9 +253,9 @@ class _ProductRegisterState extends State<ProductRegister> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
                         ),
                         child: const Text(
