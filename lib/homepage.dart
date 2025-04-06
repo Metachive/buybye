@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'models/product.dart';
 import 'package:intl/intl.dart';
 import 'product_detail.dart';
+import 'widgets/common_app_bar.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -9,28 +10,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 100,
-              width: 100,
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Image.asset(
-              'assets/images/list.png',
-              width: 30,
-              height: 30,
-            ),
-          ),
-        ],
-      ),
+      appBar: const CommonAppBar(),
       body: Column(
         children: [
           const Padding(
