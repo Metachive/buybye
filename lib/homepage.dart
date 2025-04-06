@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/product_register.dart';
 import 'models/product.dart';
 import 'package:intl/intl.dart';
 import 'product_detail.dart';
@@ -94,7 +95,7 @@ class Homepage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: Implement add to cart functionality
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductRegister()));
         },
         backgroundColor: Colors.white,
         child: Image.asset(
