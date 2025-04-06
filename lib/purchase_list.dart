@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_buybye/models/purchase.dart';
 import 'package:intl/intl.dart';
-import 'models/cart_item.dart';
 
 class PurchaseList extends StatefulWidget {
   const PurchaseList({super.key});
@@ -171,6 +170,7 @@ class _PurchaseListState extends State<PurchaseList> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
+                  // ignore: deprecated_member_use
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 1,
                   blurRadius: 4,

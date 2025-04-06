@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'models/product.dart';
 import 'models/cart_item.dart';
 import 'widgets/common_app_bar.dart';
 
@@ -203,6 +202,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
+                  // ignore: deprecated_member_use
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 1,
                   blurRadius: 4,

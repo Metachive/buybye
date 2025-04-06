@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../homepage.dart';
 import '../shopping_cart.dart';
@@ -48,7 +50,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                 right: -MediaQuery.of(context).size.width * 0.6 * value,
                 child: Material(
                   color: Colors.white,
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.6,
                     height: MediaQuery.of(context).size.height - topOffset,
                     child: Column(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'models/product.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'widgets/common_app_bar.dart';
 
 class ProductRegister extends StatefulWidget {
@@ -17,7 +17,14 @@ class _ProductRegisterState extends State<ProductRegister> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String _selectedImage = 'assets/images/product/product1.png'; // 기본 이미지
+
+  final picker = ImagePicker();
+  XFile? pickedFile;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -66,24 +73,40 @@ class _ProductRegisterState extends State<ProductRegister> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 이미지 선택
-                    Center(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            _selectedImage,
-                            width: 200,
-                            height: 200,
-                            fit: BoxFit.cover,
+                    GestureDetector(
+                      onTap: () async {
+                        final XFile? image = await picker.pickImage(
+                          source: ImageSource.gallery,
+                          imageQuality: 50,
+                        );
+                        if (image != null) {
+                          setState(() {
+                            pickedFile = image;
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(color: Colors.grey, width: 0.5),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '이미지를 선택하세요',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
                           ),
-                          const SizedBox(height: 16),
-                        ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 24),
-                    // 상품명 입력
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -217,14 +240,12 @@ class _ProductRegisterState extends State<ProductRegister> {
                       ),
                     ),
                     const SizedBox(height: 32),
-                    // 등록 버튼
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            // TODO: 상품 등록 기능 구현
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('상품이 등록되었습니다')),
                             );

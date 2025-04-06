@@ -1,7 +1,5 @@
 import 'package:flutter_buybye/models/product.dart';
 
-import 'cart_item.dart';
-
 class Purchase {
   final Product product;
   int quantity;
