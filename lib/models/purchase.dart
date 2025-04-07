@@ -1,4 +1,4 @@
-import 'product.dart';
+import 'models/product_type.dart';
 
 class Purchase {
   final Product product;

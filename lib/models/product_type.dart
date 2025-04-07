@@ -81,6 +81,5 @@ class Product {
       price: json['price'],
       description: json['description'],
     );
-
   }
 } 

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/product_type.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_buybye/shopping_cart.dart';
 import 'package:intl/intl.dart';
@@ -159,7 +160,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: ElevatedButton(
                           onPressed: () {
                             final cartList = Provider.of<CartList>(context, listen: false);
-                            cartList.addItem(product, quantity: quantity);
+                            cartList.addItem(product as Product, quantity: quantity);
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -181,7 +182,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                           MaterialPageRoute(
                                             builder: (context) {
                                               final cartList = Provider.of<CartList>(context, listen: false);
-                                              cartList.addItem(product, quantity: quantity);
+                                              cartList.addItem(product as Product, quantity: quantity);
                                               return const ShoppingCart();
                                             },
                                           ),
@@ -215,7 +216,7 @@ class _ProductDetailState extends State<ProductDetail> {
                         child: ElevatedButton(
                           onPressed: () {
                             final cartList = Provider.of<CartList>(context, listen: false);
-                            cartList.addItem(product, quantity: quantity);
+                            cartList.addItem(product as Product, quantity: quantity);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const ShoppingCart()),

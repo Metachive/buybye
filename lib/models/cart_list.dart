@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_buybye/models/cart.dart';
+import 'package:flutter_buybye/models/product_type.dart';
 import 'package:flutter_buybye/models/purchase.dart';
 import 'package:flutter_buybye/models/purchase_list.dart';
-import 'product.dart';
 
 class CartList with ChangeNotifier {
   final List<Cart> _items = [];

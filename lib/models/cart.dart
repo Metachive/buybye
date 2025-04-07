@@ -1,4 +1,4 @@
-import 'product.dart';
+import 'package:flutter_buybye/models/product_type.dart';
 
 class Cart {
   final Product product;
