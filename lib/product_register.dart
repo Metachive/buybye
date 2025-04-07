@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'models/product_type.dart';
+import 'models/product.dart';
 import 'models/product_list.dart';
 
 import 'widgets/common_app_bar.dart';
 
 class ProductRegister extends StatefulWidget {
-  const ProductRegister({
-    super.key,
-  });
+  const ProductRegister({super.key});
 
   @override
   State<ProductRegister> createState() => _ProductRegisterState();
@@ -97,23 +95,24 @@ class _ProductRegisterState extends State<ProductRegister> {
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(color: Colors.grey, width: 0.5),
                         ),
-                        child: pickedFile != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.file(
-                                  File(pickedFile!.path),
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : const Center(
-                                child: Text(
-                                  '이미지를 선택하세요',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
+                        child:
+                            pickedFile != null
+                                ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.file(
+                                    File(pickedFile!.path),
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                                : const Center(
+                                  child: Text(
+                                    '이미지를 선택하세요',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black54,
+                                    ),
                                   ),
                                 ),
-                              ),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -138,15 +137,27 @@ class _ProductRegisterState extends State<ProductRegister> {
                               decoration: const InputDecoration(
                                 hintText: '상품명을 입력하세요',
                                 border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
                                 isDense: true,
                               ),
                               validator: (value) {
@@ -183,15 +194,27 @@ class _ProductRegisterState extends State<ProductRegister> {
                               decoration: const InputDecoration(
                                 hintText: '가격을 입력하세요',
                                 border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
                                 ),
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 4,
+                                ),
                                 isDense: true,
                                 suffixText: '원',
                               ),
@@ -230,15 +253,27 @@ class _ProductRegisterState extends State<ProductRegister> {
                             decoration: const InputDecoration(
                               hintText: '상품 설명을 입력하세요',
                               border: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.5,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.5,
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.5,
+                                ),
                               ),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
                             ),
                             maxLines: 5,
                             validator: (value) {
@@ -265,7 +300,10 @@ class _ProductRegisterState extends State<ProductRegister> {
                               return;
                             }
 
-                            final productList = Provider.of<ProductList>(context, listen: false);
+                            final productList = Provider.of<ProductList>(
+                              context,
+                              listen: false,
+                            );
                             final newProduct = Product(
                               id: 'P${DateTime.now().millisecondsSinceEpoch}',
                               name: _nameController.text,
@@ -273,9 +311,9 @@ class _ProductRegisterState extends State<ProductRegister> {
                               price: int.parse(_priceController.text),
                               description: _descriptionController.text,
                             );
-                            
+
                             productList.addProduct(newProduct);
-                            
+
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('상품이 등록되었습니다')),
                             );
@@ -291,10 +329,7 @@ class _ProductRegisterState extends State<ProductRegister> {
                         ),
                         child: const Text(
                           '등록하기',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
                     ),
@@ -307,4 +342,4 @@ class _ProductRegisterState extends State<ProductRegister> {
       ),
     );
   }
-} 
+}
