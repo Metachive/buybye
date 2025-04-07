@@ -51,10 +51,13 @@ class _PurchaseListState extends State<PurchaseHistory> {
                   )
                 : ListView.separated(
                     itemCount: purchaseItems.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: Colors.grey,
+                    separatorBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: const Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: Colors.grey,
+                      ),
                     ),
                     itemBuilder: (context, index) {
                       final purchase = purchaseItems[index];
