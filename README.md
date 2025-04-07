@@ -1,19 +1,3 @@
-# flutter_buybye
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 # BuyBye - 쇼핑몰 앱
 
 BuyBye는 Flutter로 개발된 모바일 쇼핑몰 애플리케이션입니다. 사용자가 상품을 둘러보고, 장바구니에 담고, 구매할 수 있는 기능을 제공합니다.
@@ -21,26 +5,31 @@ BuyBye는 Flutter로 개발된 모바일 쇼핑몰 애플리케이션입니다. 
 ## 주요 기능
 
 ### 1. 상품 목록
+
 - 홈 화면에서 다양한 상품을 그리드 형태로 확인할 수 있습니다.
 - 각 상품은 이미지, 이름, 가격 정보를 포함합니다.
 - 상품을 탭하면 상세 페이지로 이동합니다.
 
 ### 2. 상품 상세
+
 - 상품의 상세 정보(이미지, 이름, 가격, 설명)를 확인할 수 있습니다.
 - 수량을 조절할 수 있습니다.
 - '장바구니에 담기' 또는 '구매하기' 버튼을 통해 구매 프로세스를 시작할 수 있습니다.
 
 ### 3. 장바구니
+
 - 선택한 상품들을 장바구니에 담아 관리할 수 있습니다.
 - 각 상품의 수량을 조절하거나 삭제할 수 있습니다.
 - 총 금액이 자동으로 계산됩니다.
 - '구매하기' 버튼을 통해 구매를 완료할 수 있습니다.
 
 ### 4. 구매 내역
+
 - 구매한 상품들의 목록을 확인할 수 있습니다.
 - 각 구매 항목에는 상품 이미지, 이름, 수량, 가격 정보가 표시됩니다.
 
 ### 5. 상품 등록
+
 - 새로운 상품을 등록할 수 있습니다.
 - 상품 이미지, 이름, 가격, 설명을 입력할 수 있습니다.
 
@@ -75,6 +64,7 @@ lib/
 ## 설치 및 실행 방법
 
 1. Flutter 개발 환경 설정
+
    ```
    flutter pub get
    ```
@@ -87,19 +77,23 @@ lib/
 ## 주요 화면
 
 ### 홈 화면
+
 - 상품 목록을 그리드 형태로 표시
 - 우측 하단의 + 버튼으로 상품 등록 페이지로 이동
 
 ### 상품 상세 화면
+
 - 상품의 상세 정보 표시
 - 수량 조절 및 장바구니 담기/구매 기능
 
 ### 장바구니 화면
+
 - 담은 상품 목록 표시
 - 수량 조절 및 삭제 기능
 - 총 금액 표시 및 구매 기능
 
 ### 구매 내역 화면
+
 - 구매한 상품 목록 표시
 - 각 상품의 수량 및 가격 정보 표시
 
