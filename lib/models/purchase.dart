@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'product.dart';
-import 'cart.dart';
 
 class Purchase {
   final Product product;

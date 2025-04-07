@@ -279,6 +279,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                       cartList.clear();
+                                      Navigator.pop(context);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
