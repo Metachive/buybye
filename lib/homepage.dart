@@ -4,12 +4,20 @@ import 'models/product.dart';
 import 'package:intl/intl.dart';
 import 'product_detail.dart';
 import 'widgets/common_app_bar.dart';
+import 'package:provider/provider.dart';
+import 'models/product_list.dart';
+import 'dart:io';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final productList = Provider.of<ProductList>(context);
+    final products = productList.products.isEmpty 
+        ? ProductType.values.map((type) => Product.fromType(type)).toList()
+        : productList.products;
+
     return Scaffold(
       appBar: const CommonAppBar(),
       body: Column(
@@ -33,10 +41,9 @@ class Homepage extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-              itemCount: ProductType.values.length,
+              itemCount: products.length,
               itemBuilder: (context, index) {
-                final productType = ProductType.values[index];
-                final product = Product.fromType(productType);
+                final product = products[index];
                 
                 return GestureDetector(
                   onTap: () {
@@ -44,7 +51,7 @@ class Homepage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ProductDetail(
-                          productId: productType.id,
+                          productId: product.id,
                         ),
                       ),
                     );
@@ -59,10 +66,15 @@ class Homepage extends StatelessWidget {
                             border: Border.all(color: Colors.grey.shade300),
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Image.asset(
-                            product.imagePath,
-                            fit: BoxFit.cover,
-                          ),
+                          child: product.imagePath.startsWith('assets/')
+                              ? Image.asset(
+                                  product.imagePath,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.file(
+                                  File(product.imagePath),
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -95,7 +107,7 @@ class Homepage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ProductRegister()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductRegister()));
         },
         backgroundColor: Colors.white,
         child: Image.asset(

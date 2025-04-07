@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:provider/provider.dart';
+import 'models/product.dart';
+import 'models/product_list.dart';
 
 import 'widgets/common_app_bar.dart';
 
@@ -93,20 +97,28 @@ class _ProductRegisterState extends State<ProductRegister> {
                           borderRadius: BorderRadius.circular(8.0),
                           border: Border.all(color: Colors.grey, width: 0.5),
                         ),
-                        child: const Center(
-                          child: Text(
-                            '이미지를 선택하세요',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.black54,
-                            ),
-                          ),
-                        ),
+                        child: pickedFile != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.file(
+                                  File(pickedFile!.path),
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : const Center(
+                                child: Text(
+                                  '이미지를 선택하세요',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                     const SizedBox(height: 24),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -246,6 +258,24 @@ class _ProductRegisterState extends State<ProductRegister> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            if (pickedFile == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('이미지를 선택해주세요')),
+                              );
+                              return;
+                            }
+
+                            final productList = Provider.of<ProductList>(context, listen: false);
+                            final newProduct = Product(
+                              id: 'P${DateTime.now().millisecondsSinceEpoch}',
+                              name: _nameController.text,
+                              imagePath: pickedFile!.path,
+                              price: int.parse(_priceController.text),
+                              description: _descriptionController.text,
+                            );
+                            
+                            productList.addProduct(newProduct);
+                            
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('상품이 등록되었습니다')),
                             );

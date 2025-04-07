@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'homepage.dart';
 import 'models/cart_list.dart';
 import 'models/purchase_list.dart';
+import 'models/product_list.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized(); 
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => CartList()),
         ChangeNotifierProvider(create: (ctx) => PurchaseList()),
+        ChangeNotifierProvider(create: (ctx) => ProductList()),
       ],
       child: MaterialApp(
         title: 'BuyBye',

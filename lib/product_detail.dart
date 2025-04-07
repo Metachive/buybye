@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_buybye/shopping_cart.dart';
 import 'package:intl/intl.dart';
-import 'models/product.dart';
 import 'models/cart_list.dart';
+import 'models/product_list.dart';
 import 'widgets/common_app_bar.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -29,9 +31,17 @@ class _ProductDetailState extends State<ProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final product = Product.fromType(
-      ProductType.values.firstWhere((type) => type.id == widget.productId),
-    );
+    final productList = Provider.of<ProductList>(context);
+    final product = productList.getProductById(widget.productId);
+    
+    if (product == null) {
+      return Scaffold(
+        appBar: const CommonAppBar(),
+        body: const Center(
+          child: Text('상품을 찾을 수 없습니다.'),
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: const CommonAppBar(),
@@ -63,12 +73,19 @@ class _ProductDetailState extends State<ProductDetail> {
                 ],
               ),
             ),
-            Image.asset(
-              product.imagePath,
-              width: double.infinity,
-              height: 300,
-              fit: BoxFit.cover,
-            ),
+            product.imagePath.startsWith('assets/')
+                ? Image.asset(
+                    product.imagePath,
+                    width: double.infinity,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  )
+                : Image.file(
+                    File(product.imagePath),
+                    width: double.infinity,
+                    height: 300,
+                    fit: BoxFit.cover,
+                  ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -135,33 +152,7 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
                     ],
                   ),
-                  if (quantity > 0) ...[
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const Text(
-                            '합계 ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Text(
-                            '${NumberFormat('#,###').format(product.price * quantity)}원',
-                            style: const TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(

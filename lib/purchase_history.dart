@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_buybye/models/purchase_list.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 import 'widgets/common_app_bar.dart';
 
 class PurchaseHistory extends StatefulWidget {
@@ -51,13 +52,9 @@ class _PurchaseListState extends State<PurchaseHistory> {
                   )
                 : ListView.separated(
                     itemCount: purchaseItems.length,
-                    separatorBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                      child: const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: Colors.grey,
-                      ),
+                    separatorBuilder: (context, index) => const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 30.0),
+                      child: Divider(color: Colors.grey),
                     ),
                     itemBuilder: (context, index) {
                       final purchase = purchaseItems[index];
@@ -91,14 +88,14 @@ class _PurchaseListState extends State<PurchaseHistory> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '수량: ${purchase.quantity}개',
+                                        '${purchase.quantity}개',
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey,
                                         ),
                                       ),
                                       Text(
-                                        '${(purchase.product.price * purchase.quantity).toStringAsFixed(0)}원',
+                                        '${NumberFormat('#,###').format(purchase.product.price)}원',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
