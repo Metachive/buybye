@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'homepage.dart';
+import 'product_register.dart';
 
 void main() {
   runApp(const MyApp());
