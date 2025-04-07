@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_buybye/models/purchase.dart';
 import 'package:flutter_buybye/models/purchase_list.dart';
+import 'package:flutter_buybye/models/purchase.dart';
 import 'package:provider/provider.dart';
+import 'models/purchase_list.dart' as purchase_list;
 import 'widgets/common_app_bar.dart';
 
 class PurchaseHistory extends StatefulWidget {
@@ -11,12 +12,12 @@ class PurchaseHistory extends StatefulWidget {
   State<PurchaseHistory> createState() => _PurchaseListState();
 }
 
-@override
 class _PurchaseListState extends State<PurchaseHistory> {
-  final List<Purchase> _purchase = PurchaseList().getDefaultItems();
-
   @override
   Widget build(BuildContext context) {
+    final purchaseList = Provider.of<PurchaseList>(context);
+    late List purchaseItems = purchaseList.getDefaultItems();
+
     return Scaffold(
       appBar: const CommonAppBar(),
       body: Column(
@@ -40,7 +41,7 @@ class _PurchaseListState extends State<PurchaseHistory> {
             ),
           ),
           Expanded(
-            child: _purchase.isEmpty
+            child: purchaseItems.isEmpty
                 ? const Center(
                     child: Text(
                       '구매 내역이 없습니다.',
@@ -51,9 +52,9 @@ class _PurchaseListState extends State<PurchaseHistory> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: _purchase.length,
+                    itemCount: purchaseItems.length,
                     itemBuilder: (context, index) {
-                      final item = _purchase[index];
+                      final item = purchaseItems[index];
                       return Dismissible(
                         key: ValueKey(item.product.id),
                         background: Container(
@@ -72,7 +73,7 @@ class _PurchaseListState extends State<PurchaseHistory> {
                         ),
                         direction: DismissDirection.endToStart,
                         onDismissed: (direction) {
-                          _removeItem(index);
+                          purchaseList.removeItem(item.product.id);
                         },
                         child: Card(
                           margin: const EdgeInsets.symmetric(
@@ -115,11 +116,5 @@ class _PurchaseListState extends State<PurchaseHistory> {
         ],
       ),
     );
-  }
-  
-  void _removeItem(int index) {
-    setState(() {
-      _purchase.removeAt(index);
-    });
   }
 }

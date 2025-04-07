@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/purchase.dart';
+import 'package:flutter_buybye/models/purchase_list.dart';
+import 'package:flutter_buybye/purchase_history.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'models/cart_list.dart';
@@ -14,7 +17,8 @@ class ShoppingCart extends StatefulWidget {
 class _ShoppingCartState extends State<ShoppingCart> {
   @override
   Widget build(BuildContext context) {
-    final cartList = Provider.of<CartList>(context);
+    final cartList = Provider.of<CartList>(context, listen: false);
+    final purchaseList = Provider.of<PurchaseList>(context, listen: false);
     final cartItems = cartList.getDefaultItems();
     
     return Scaffold(
@@ -253,25 +257,53 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Container(
+                SizedBox(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ElevatedButton(
-                    onPressed: () {
-                      // 구매 로직 작성
-                    },
+                    onPressed: cartItems.isEmpty
+                        ? null
+                        : () {
+                            purchaseList.addPurchases(
+                              cartItems.map((cartItem) => Purchase(
+                                product: cartItem.product,
+                                quantity: cartItem.quantity,
+                              )).toList(),
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('구매 완료'),
+                                content: const Text('구매가 완료되었습니다.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      cartList.clear();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PurchaseHistory(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('확인'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: const Text(
                       '구매하기',
                       style: TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),

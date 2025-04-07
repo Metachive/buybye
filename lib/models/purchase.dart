@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'product.dart';
+import 'cart.dart';
 
 class Purchase {
   final Product product;
@@ -24,4 +26,8 @@ class Purchase {
       quantity: json['quantity'],
     );
   }
-} 
+
+  void call() {
+    // call 메서드 구현
+  }
+}

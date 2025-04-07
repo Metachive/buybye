@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_buybye/models/cart.dart';
+import 'package:flutter_buybye/models/purchase.dart';
+import 'package:flutter_buybye/models/purchase_list.dart';
 import 'product.dart';
 
 class CartList with ChangeNotifier {
@@ -29,7 +31,7 @@ class CartList with ChangeNotifier {
         quantity: quantity,
       ));
     }
-    // notifyListeners(); // 빌드 중에 상태 변경이 발생하지 않도록 주석 처리
+    // notifyListeners();
   }
 
   void removeItem(String productId) {
@@ -58,6 +60,22 @@ class CartList with ChangeNotifier {
       _items.removeAt(index);
       notifyListeners();
     }
+  }
+
+  void purchase(PurchaseList purchaseList) {
+    if (_items.isEmpty) return;
+    
+    final purchases = _items.map((cartItem) => Purchase(
+      product: cartItem.product,
+      quantity: cartItem.quantity,
+    )).toList();
+    
+    purchaseList.addPurchases(purchases);
+    
+    // 상태 변경을 마이크로태스크 큐에 추가하여 빌드 과정 이후에 실행되도록 합니다.
+    Future.microtask(() {
+      clear();
+    });
   }
 }
 

@@ -10,7 +10,22 @@ class PurchaseList extends ChangeNotifier {
     return _items;
   }
 
+  void addPurchases(List<Purchase> purchaseList) {
+    for (var purchase in purchaseList) {
+      _items.add(Purchase(
+        product: purchase.product,
+        quantity: purchase.quantity,
+      ));
+    }
+    notifyListeners();
+  }
+
   void removeItem(String id) {
     _items.removeWhere((item) => item.product.id == id);
   }
-} 
+
+  void clear() {
+    _items.clear();
+    notifyListeners();
+  }
+}
