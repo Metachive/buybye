@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_buybye/models/cart.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'models/cart_list.dart';
 import 'widgets/common_app_bar.dart';
 
@@ -12,27 +12,11 @@ class ShoppingCart extends StatefulWidget {
 }
 
 class _ShoppingCartState extends State<ShoppingCart> {
-  final List<Cart> _cart = CartList().getDefaultItems();
-
-  void _updateQuantity(int index, int newQuantity) {
-    if (newQuantity < 1) return;
-    setState(() {
-      _cart[index].quantity = newQuantity;
-    });
-  }
-
-  void _removeItem(int index) {
-    setState(() {
-      _cart.removeAt(index);
-    });
-  }
-
-  int get _totalPrice {
-    return _cart.fold(0, (sum, item) => sum + item.totalPrice);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final cartList = Provider.of<CartList>(context);
+    final cartItems = cartList.getDefaultItems();
+    
     return Scaffold(
       appBar: const CommonAppBar(),
       body: Column(
@@ -62,7 +46,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             ),
           ),
           Expanded(
-            child: _cart.isEmpty
+            child: cartItems.isEmpty
                 ? const Center(
                     child: Text(
                       '장바구니에 상품이 없습니다.',
@@ -73,9 +57,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: _cart.length,
+                    itemCount: cartItems.length,
                     itemBuilder: (context, index) {
-                      final cartItem = _cart[index];
+                      final cartItem = cartItems[index];
                       final product = cartItem.product;
 
                       return Column(
@@ -111,8 +95,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                           IconButton(
                                             icon: const Icon(Icons.close,
                                                 size: 20),
-                                            onPressed: () =>
-                                                _removeItem(index),
+                                            onPressed: () {
+                                              cartList.removeItem(product.id);
+                                            },
                                             padding: EdgeInsets.zero,
                                             constraints:
                                                 const BoxConstraints(),
@@ -137,11 +122,13 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                 child: IconButton(
                                                   icon: const Icon(Icons.remove,
                                                       size: 14),
-                                                  onPressed: () =>
-                                                      _updateQuantity(
-                                                          index,
-                                                          cartItem.quantity -
-                                                              1),
+                                                  onPressed: () {
+                                                    if (cartItem.quantity > 1) {
+                                                      cartList.updateQuantity(
+                                                          product.id,
+                                                          cartItem.quantity - 1);
+                                                    }
+                                                  },
                                                   padding: EdgeInsets.zero,
                                                   constraints:
                                                       const BoxConstraints(),
@@ -177,11 +164,11 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                 child: IconButton(
                                                   icon: const Icon(Icons.add,
                                                       size: 14),
-                                                  onPressed: () =>
-                                                      _updateQuantity(
-                                                          index,
-                                                          cartItem.quantity +
-                                                              1),
+                                                  onPressed: () {
+                                                    cartList.updateQuantity(
+                                                        product.id,
+                                                        cartItem.quantity + 1);
+                                                  },
                                                   padding: EdgeInsets.zero,
                                                   constraints:
                                                       const BoxConstraints(),
@@ -209,7 +196,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               ],
                             ),
                           ),
-                          if (index < _cart.length - 1)
+                          if (index < cartItems.length - 1)
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16.0),
@@ -242,19 +229,25 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      '총 결제금액',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    const Padding(
+                      padding: EdgeInsets.only(left: 16.0),
+                      child: Text(
+                        '총 결제금액',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    Text(
-                      '${NumberFormat('#,###').format(_totalPrice)}원',
-                      style: const TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: Text(
+                        '${NumberFormat('#,###').format(cartList.totalAmount)}원',
+                        style: const TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],

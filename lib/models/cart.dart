@@ -6,7 +6,7 @@ class Cart {
 
   Cart({
     required this.product,
-    this.quantity = 1,
+    this.quantity = 0,
   });
 
   int get totalPrice => product.price * quantity;

@@ -21,7 +21,7 @@ class CartList with ChangeNotifier {
     if (existingItemIndex >= 0) {
       _items[existingItemIndex] = Cart(
         product: product,
-        quantity: _items[existingItemIndex].quantity + quantity,
+        quantity: quantity,
       );
     } else {
       _items.add(Cart(
@@ -29,6 +29,7 @@ class CartList with ChangeNotifier {
         quantity: quantity,
       ));
     }
+    // notifyListeners(); // 빌드 중에 상태 변경이 발생하지 않도록 주석 처리
   }
 
   void removeItem(String productId) {
@@ -40,7 +41,7 @@ class CartList with ChangeNotifier {
     final index = _items.indexWhere((item) => item.product.id == productId);
     if (index >= 0) {
       _items[index] = Cart(
-        product: Product.fromType(ProductType.values[index]),
+        product: _items[index].product,
         quantity: quantity,
       );
       notifyListeners();
@@ -52,7 +53,12 @@ class CartList with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeAt(int index) {}
+  void removeAt(int index) {
+    if (index >= 0 && index < _items.length) {
+      _items.removeAt(index);
+      notifyListeners();
+    }
+  }
 }
 
 class ProductItem {

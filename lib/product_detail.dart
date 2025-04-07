@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_buybye/shopping_cart.dart';
 import 'package:intl/intl.dart';
 import 'models/product.dart';
+import 'models/cart_list.dart';
 import 'widgets/common_app_bar.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -165,6 +167,8 @@ class _ProductDetailState extends State<ProductDetail> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
+                            final cartList = Provider.of<CartList>(context, listen: false);
+                            cartList.addItem(product, quantity: quantity);
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -174,14 +178,23 @@ class _ProductDetailState extends State<ProductDetail> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop(); // Close the dialog
+                                        Navigator.of(context).pop();
                                       },
                                       child: const Text('계속 쇼핑'),
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop(); // Close the dialog
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart()));
+                                        Navigator.of(context).pop();
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              final cartList = Provider.of<CartList>(context, listen: false);
+                                              cartList.addItem(product, quantity: quantity);
+                                              return const ShoppingCart();
+                                            },
+                                          ),
+                                        );
                                       },
                                       child: const Text('장바구니로 이동'),
                                     ),
@@ -189,7 +202,6 @@ class _ProductDetailState extends State<ProductDetail> {
                                 );
                               },
                             );
-                            // Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart()));
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
@@ -211,7 +223,12 @@ class _ProductDetailState extends State<ProductDetail> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ShoppingCart()));
+                            final cartList = Provider.of<CartList>(context, listen: false);
+                            cartList.addItem(product, quantity: quantity);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ShoppingCart()),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
