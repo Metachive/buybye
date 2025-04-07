@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../homepage.dart';
 import '../shopping_cart.dart';
 import '../product_register.dart';
+import '../purchase_history.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -85,7 +86,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
                             overlayEntry.remove();
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ShoppingCart()),
+                              MaterialPageRoute(builder: (context) => const PurchaseHistory()),
                             );
                           },
                         ),

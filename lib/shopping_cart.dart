@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/cart.dart';
 import 'package:intl/intl.dart';
-import 'models/cart_item.dart';
+import 'models/cart_list.dart';
 import 'widgets/common_app_bar.dart';
 
 class ShoppingCart extends StatefulWidget {
@@ -11,24 +12,23 @@ class ShoppingCart extends StatefulWidget {
 }
 
 class _ShoppingCartState extends State<ShoppingCart> {
-  // 임시 장바구니 데이터
-  final List<CartItem> _cartItems = CartItem.getDefaultItems();
+  final List<Cart> _cart = CartList().getDefaultItems();
 
   void _updateQuantity(int index, int newQuantity) {
     if (newQuantity < 1) return;
     setState(() {
-      _cartItems[index].quantity = newQuantity;
+      _cart[index].quantity = newQuantity;
     });
   }
 
   void _removeItem(int index) {
     setState(() {
-      _cartItems.removeAt(index);
+      _cart.removeAt(index);
     });
   }
 
   int get _totalPrice {
-    return _cartItems.fold(0, (sum, item) => sum + item.totalPrice);
+    return _cart.fold(0, (sum, item) => sum + item.totalPrice);
   }
 
   @override
@@ -62,7 +62,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
             ),
           ),
           Expanded(
-            child: _cartItems.isEmpty
+            child: _cart.isEmpty
                 ? const Center(
                     child: Text(
                       '장바구니에 상품이 없습니다.',
@@ -73,15 +73,16 @@ class _ShoppingCartState extends State<ShoppingCart> {
                     ),
                   )
                 : ListView.builder(
-                    itemCount: _cartItems.length,
+                    itemCount: _cart.length,
                     itemBuilder: (context, index) {
-                      final cartItem = _cartItems[index];
+                      final cartItem = _cart[index];
                       final product = cartItem.product;
 
                       return Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0, vertical: 8.0),
                             child: Row(
                               children: [
                                 Image.asset(
@@ -93,11 +94,12 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             product.name,
@@ -107,16 +109,20 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                             ),
                                           ),
                                           IconButton(
-                                            icon: const Icon(Icons.close, size: 20),
-                                            onPressed: () => _removeItem(index),
+                                            icon: const Icon(Icons.close,
+                                                size: 20),
+                                            onPressed: () =>
+                                                _removeItem(index),
                                             padding: EdgeInsets.zero,
-                                            constraints: const BoxConstraints(),
+                                            constraints:
+                                                const BoxConstraints(),
                                           ),
                                         ],
                                       ),
                                       const SizedBox(height: 8),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Row(
                                             children: [
@@ -124,13 +130,21 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                 height: 24,
                                                 width: 24,
                                                 decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  border: Border.all(
+                                                      color: Colors
+                                                          .grey.shade300),
                                                 ),
                                                 child: IconButton(
-                                                  icon: const Icon(Icons.remove, size: 14),
-                                                  onPressed: () => _updateQuantity(index, cartItem.quantity - 1),
+                                                  icon: const Icon(Icons.remove,
+                                                      size: 14),
+                                                  onPressed: () =>
+                                                      _updateQuantity(
+                                                          index,
+                                                          cartItem.quantity -
+                                                              1),
                                                   padding: EdgeInsets.zero,
-                                                  constraints: const BoxConstraints(),
+                                                  constraints:
+                                                      const BoxConstraints(),
                                                 ),
                                               ),
                                               const SizedBox(width: 4),
@@ -138,12 +152,16 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                 height: 24,
                                                 width: 40,
                                                 decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  border: Border.all(
+                                                      color: Colors
+                                                          .grey.shade300),
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    cartItem.quantity.toString(),
-                                                    style: const TextStyle(fontSize: 12),
+                                                    cartItem.quantity
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
                                                   ),
                                                 ),
                                               ),
@@ -152,19 +170,28 @@ class _ShoppingCartState extends State<ShoppingCart> {
                                                 height: 24,
                                                 width: 24,
                                                 decoration: BoxDecoration(
-                                                  border: Border.all(color: Colors.grey.shade300),
+                                                  border: Border.all(
+                                                      color: Colors
+                                                          .grey.shade300),
                                                 ),
                                                 child: IconButton(
-                                                  icon: const Icon(Icons.add, size: 14),
-                                                  onPressed: () => _updateQuantity(index, cartItem.quantity + 1),
+                                                  icon: const Icon(Icons.add,
+                                                      size: 14),
+                                                  onPressed: () =>
+                                                      _updateQuantity(
+                                                          index,
+                                                          cartItem.quantity +
+                                                              1),
                                                   padding: EdgeInsets.zero,
-                                                  constraints: const BoxConstraints(),
+                                                  constraints:
+                                                      const BoxConstraints(),
                                                 ),
                                               ),
                                             ],
                                           ),
                                           Padding(
-                                            padding: const EdgeInsets.only(right: 16.0),
+                                            padding: const EdgeInsets.only(
+                                                right: 16.0),
                                             child: Text(
                                               '${NumberFormat('#,###').format(cartItem.totalPrice)}원',
                                               style: const TextStyle(
@@ -182,9 +209,10 @@ class _ShoppingCartState extends State<ShoppingCart> {
                               ],
                             ),
                           ),
-                          if (index < _cartItems.length - 1)
+                          if (index < _cart.length - 1)
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Divider(
                                 height: 1,
                                 thickness: 1,
@@ -202,8 +230,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  // ignore: deprecated_member_use
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 51),
                   spreadRadius: 1,
                   blurRadius: 4,
                   offset: const Offset(0, -1),
@@ -212,42 +239,34 @@ class _ShoppingCartState extends State<ShoppingCart> {
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
                       '총 결제금액',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
-                      ),
-                      Text(
+                    ),
+                    Text(
                       '${NumberFormat('#,###').format(_totalPrice)}원',
                       style: const TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      // if (_formKey.currentState!.validate()) {
-                      //   // TODO: 상품 등록 기능 구현
-                      //   ScaffoldMessenger.of(context).showSnackBar(
-                      //     const SnackBar(content: Text('상품이 등록되었습니다')),
-                      //   );
-                      //   Navigator.pop(context);
-                      // }
+                      // 구매 로직 작성
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
@@ -272,4 +291,4 @@ class _ShoppingCartState extends State<ShoppingCart> {
       ),
     );
   }
-} 
+}

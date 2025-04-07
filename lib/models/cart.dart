@@ -1,10 +1,10 @@
 import 'product.dart';
 
-class Purchase {
+class Cart {
   final Product product;
   int quantity;
 
-  Purchase({
+  Cart({
     required this.product,
     this.quantity = 1,
   });
@@ -18,8 +18,8 @@ class Purchase {
     };
   }
 
-  factory Purchase.fromJson(Map<String, dynamic> json) {
-    return Purchase(
+  factory Cart.fromJson(Map<String, dynamic> json) {
+    return Cart(
       product: Product.fromJson(json['product']),
       quantity: json['quantity'],
     );
