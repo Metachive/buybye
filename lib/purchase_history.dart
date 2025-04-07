@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/purchase_list.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'widgets/common_app_bar.dart';
 
-class PurchaseHistory extends StatelessWidget {
+class PurchaseHistory extends StatefulWidget {
   const PurchaseHistory({super.key});
 
   @override
+  State<PurchaseHistory> createState() => _PurchaseListState();
+}
+
+class _PurchaseListState extends State<PurchaseHistory> {
+  @override
   Widget build(BuildContext context) {
-    // 임시 데이터 (뷰 확인용)
-    final purchaseItems = [
-      {
-        'imagePath': 'assets/sample1.jpg',
-        'name': '샘플 상품 A',
-        'quantity': 2,
-        'price': 15000,
-      },
-      {
-        'imagePath': 'assets/sample2.jpg',
-        'name': '샘플 상품 B',
-        'quantity': 1,
-        'price': 20000,
-      },
-    ];
+    final purchaseList = Provider.of<PurchaseList>(context);
+    final purchaseItems = purchaseList.getDefaultItems();
 
     return Scaffold(
       appBar: const CommonAppBar(),
@@ -30,10 +24,10 @@ class PurchaseHistory extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Stack(
-              children: const [
+              children: [
                 SizedBox(
                   width: double.infinity,
-                  child: Text(
+                  child: const Text(
                     '구매리스트',
                     style: TextStyle(
                       fontSize: 18,
@@ -63,7 +57,7 @@ class PurchaseHistory extends StatelessWidget {
                       child: Divider(color: Colors.grey),
                     ),
                     itemBuilder: (context, index) {
-                      final item = purchaseItems[index];
+                      final purchase = purchaseItems[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 12.0),
                         child: Row(
@@ -71,7 +65,7 @@ class PurchaseHistory extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8.0),
                               child: Image.asset(
-                                item['imagePath']!,
+                                purchase.product.imagePath,
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
@@ -83,7 +77,7 @@ class PurchaseHistory extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    item['name']!,
+                                    purchase.product.name,
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -94,14 +88,14 @@ class PurchaseHistory extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '${item['quantity']}개',
+                                        '${purchase.quantity}개',
                                         style: const TextStyle(
                                           fontSize: 14,
                                           color: Colors.grey,
                                         ),
                                       ),
                                       Text(
-                                        '${NumberFormat('#,###').format(item['price'])}원',
+                                        '${NumberFormat('#,###').format(purchase.product.price)}원',
                                         style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
