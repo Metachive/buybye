@@ -125,6 +125,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       leading: null,
+      backgroundColor: Colors.white,
+      elevation: 0,
       title: GestureDetector(
         onTap: () {
           Navigator.pushAndRemoveUntil(
