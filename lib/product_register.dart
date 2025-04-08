@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/product_type.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-import 'models/product.dart';
 import 'models/product_list.dart';
 
 import 'widgets/common_app_bar.dart';

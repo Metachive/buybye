@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'product.dart';
+import 'package:flutter_buybye/models/product_type.dart';
 
 class ProductList with ChangeNotifier {
   List<Product> _products = [];

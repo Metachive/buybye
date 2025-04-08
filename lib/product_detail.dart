@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_buybye/models/product_type.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_buybye/shopping_cart.dart';
 import 'package:intl/intl.dart';
@@ -157,7 +156,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               listen: false,
                             );
                             cartList.addItem(
-                              product as Product,
+                              product,
                               quantity: quantity,
                             );
                             showDialog(
@@ -186,7 +185,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                                     listen: false,
                                                   );
                                               cartList.addItem(
-                                                product as Product,
+                                                product,
                                                 quantity: quantity,
                                               );
                                               return const ShoppingCart();
@@ -223,7 +222,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               listen: false,
                             );
                             cartList.addItem(
-                              product as Product,
+                              product,
                               quantity: quantity,
                             );
                             Navigator.push(

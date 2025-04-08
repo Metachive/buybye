@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/product_type.dart';
 import 'package:flutter_buybye/product_register.dart';
-import 'models/product.dart';
 import 'package:intl/intl.dart';
 import 'product_detail.dart';
 import 'widgets/common_app_bar.dart';
