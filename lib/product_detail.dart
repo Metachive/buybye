@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,6 +99,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     '${NumberFormat('#,###').format(product.price)}원',
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -146,6 +148,28 @@ class _ProductDetailState extends State<ProductDetail> {
                     ],
                   ),
                   const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        '총 금액',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        '${NumberFormat('#,###').format(product.price * quantity)}원',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
