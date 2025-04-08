@@ -31,12 +31,16 @@ class CartList with ChangeNotifier {
         quantity: quantity,
       ));
     }
-    // notifyListeners();
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   void removeItem(String productId) {
     _items.removeWhere((item) => item.product.id == productId);
-    notifyListeners();
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   void updateQuantity(String productId, int quantity) {
@@ -46,19 +50,25 @@ class CartList with ChangeNotifier {
         product: _items[index].product,
         quantity: quantity,
       );
-      notifyListeners();
+      Future.microtask(() {
+        notifyListeners();
+      });
     }
   }
 
   void clear() {
     _items.clear();
-    notifyListeners();
+    Future.microtask(() {
+      notifyListeners();
+    });
   }
 
   void removeAt(int index) {
     if (index >= 0 && index < _items.length) {
       _items.removeAt(index);
-      notifyListeners();
+      Future.microtask(() {
+        notifyListeners();
+      });
     }
   }
 

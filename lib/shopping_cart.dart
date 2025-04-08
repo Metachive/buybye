@@ -17,7 +17,7 @@ class ShoppingCart extends StatefulWidget {
 class _ShoppingCartState extends State<ShoppingCart> {
   @override
   Widget build(BuildContext context) {
-    final cartList = Provider.of<CartList>(context, listen: false);
+    final cartList = Provider.of<CartList>(context, listen: true);
     final purchaseList = Provider.of<PurchaseList>(context, listen: false);
     final cartItems = cartList.getDefaultItems();
     
