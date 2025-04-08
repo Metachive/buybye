@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/product_type.dart';
+import 'package:flutter_buybye/product_register.dart';
+import 'package:intl/intl.dart';
+import 'product_detail.dart';
+import 'widgets/common_app_bar.dart';
+import 'package:provider/provider.dart';
+import 'models/product_list.dart';
 import 'dart:io';
 
 class Homepage extends StatelessWidget {
@@ -6,18 +13,14 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 예시용 더미 상품 리스트 (하드코딩된 6개 박스)
-    final dummyProducts = List.generate(
-      6,
-      (index) => {
-        'name': '상품 $index',
-        'price': 10000 * (index + 1),
-        'imagePath': 'assets/images/list.png', // 또는 File 경로 문자열
-      },
-    );
+    final productList = Provider.of<ProductList>(context);
+    final products =
+        productList.products.isEmpty
+            ? ProductType.values.map((type) => Product.fromType(type)).toList()
+            : productList.products;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('로고'), centerTitle: true),
+      appBar: const CommonAppBar(),
       body: Column(
         children: [
           const Padding(
@@ -36,43 +39,64 @@ class Homepage extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-              itemCount: dummyProducts.length,
+              itemCount: products.length,
               itemBuilder: (context, index) {
-                final product = dummyProducts[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 1.2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Image.asset(
-                          product['imagePath']! as String,
-                          fit: BoxFit.cover,
+                final product = products[index];
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => ProductDetail(productId: product.id),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1.2,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child:
+                              product.imagePath.startsWith('assets/')
+                                  ? Image.asset(
+                                    product.imagePath,
+                                    fit: BoxFit.cover,
+                                  )
+                                  : Image.file(
+                                    File(product.imagePath),
+                                    fit: BoxFit.cover,
+                                  ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      product['name']! as String,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 8),
+                      Text(
+                        product.name,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${product['price']}원',
-                      style: const TextStyle(fontSize: 12, color: Colors.black),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        '${NumberFormat('#,###').format(product.price)}원',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 );
               },
             ),
@@ -81,7 +105,10 @@ class Homepage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 아무 기능 없음
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const ProductRegister()),
+          );
         },
         backgroundColor: Colors.white,
         child: Image.asset('assets/images/plus.png', width: 24, height: 24),

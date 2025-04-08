@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_buybye/models/purchase.dart';
+import 'package:flutter_buybye/models/purchase_list.dart';
+import 'package:flutter_buybye/purchase_history.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'models/cart_list.dart';
 import 'widgets/common_app_bar.dart';
 
-class ShoppingCart extends StatelessWidget {
+class ShoppingCart extends StatefulWidget {
   const ShoppingCart({super.key});
 
   @override
+  State<ShoppingCart> createState() => _ShoppingCartState();
+}
+
+class _ShoppingCartState extends State<ShoppingCart> {
+  @override
   Widget build(BuildContext context) {
-    // 더미 데이터
-    final cartItems = [
-      {
-        'name': '샘플 상품 1',
-        'imagePath': 'assets/sample1.jpg',
-        'quantity': 2,
-        'totalPrice': 30000,
-      },
-      {
-        'name': '샘플 상품 2',
-        'imagePath': 'assets/sample2.jpg',
-        'quantity': 1,
-        'totalPrice': 15000,
-      },
-    ];
-
-    final totalAmount =
-        cartItems.fold(0, (sum, item) => sum + (item['totalPrice'] as int));
-
+    final cartList = Provider.of<CartList>(context, listen: true);
+    final purchaseList = Provider.of<PurchaseList>(context, listen: false);
+    final cartItems = cartList.getDefaultItems();
+    
     return Scaffold(
       appBar: const CommonAppBar(),
       body: Column(
@@ -34,11 +29,14 @@ class ShoppingCart extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Stack(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: double.infinity,
-                  child: Text(
+                  child: const Text(
                     '장바구니',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -56,13 +54,17 @@ class ShoppingCart extends StatelessWidget {
                 ? const Center(
                     child: Text(
                       '장바구니에 상품이 없습니다.',
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
                     ),
                   )
                 : ListView.builder(
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
-                      final item = cartItems[index];
+                      final cartItem = cartItems[index];
+                      final product = cartItem.product;
 
                       return Column(
                         children: [
@@ -72,7 +74,7 @@ class ShoppingCart extends StatelessWidget {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  item['imagePath']!,
+                                  product.imagePath,
                                   width: 80,
                                   height: 80,
                                   fit: BoxFit.cover,
@@ -88,13 +90,22 @@ class ShoppingCart extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            item['name']!,
+                                            product.name,
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          const Icon(Icons.close, size: 20),
+                                          IconButton(
+                                            icon: const Icon(Icons.close,
+                                                size: 20),
+                                            onPressed: () {
+                                              cartList.removeItem(product.id);
+                                            },
+                                            padding: EdgeInsets.zero,
+                                            constraints:
+                                                const BoxConstraints(),
+                                          ),
                                         ],
                                       ),
                                       const SizedBox(height: 8),
@@ -104,32 +115,76 @@ class ShoppingCart extends StatelessWidget {
                                         children: [
                                           Row(
                                             children: [
-                                              _quantityBox(Icons.remove),
+                                              Container(
+                                                height: 24,
+                                                width: 24,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors
+                                                          .grey.shade300),
+                                                ),
+                                                child: IconButton(
+                                                  icon: const Icon(Icons.remove,
+                                                      size: 14),
+                                                  onPressed: () {
+                                                    if (cartItem.quantity > 1) {
+                                                      cartList.updateQuantity(
+                                                          product.id,
+                                                          cartItem.quantity - 1);
+                                                    }
+                                                  },
+                                                  padding: EdgeInsets.zero,
+                                                  constraints:
+                                                      const BoxConstraints(),
+                                                ),
+                                              ),
                                               const SizedBox(width: 4),
                                               Container(
                                                 height: 24,
                                                 width: 40,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
-                                                      color: Colors.grey.shade300),
+                                                      color: Colors
+                                                          .grey.shade300),
                                                 ),
                                                 child: Center(
                                                   child: Text(
-                                                    '${item['quantity']}',
-                                                    style:
-                                                        const TextStyle(fontSize: 12),
+                                                    cartItem.quantity
+                                                        .toString(),
+                                                    style: const TextStyle(
+                                                        fontSize: 12),
                                                   ),
                                                 ),
                                               ),
                                               const SizedBox(width: 4),
-                                              _quantityBox(Icons.add),
+                                              Container(
+                                                height: 24,
+                                                width: 24,
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors
+                                                          .grey.shade300),
+                                                ),
+                                                child: IconButton(
+                                                  icon: const Icon(Icons.add,
+                                                      size: 14),
+                                                  onPressed: () {
+                                                    cartList.updateQuantity(
+                                                        product.id,
+                                                        cartItem.quantity + 1);
+                                                  },
+                                                  padding: EdgeInsets.zero,
+                                                  constraints:
+                                                      const BoxConstraints(),
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 16.0),
+                                            padding: const EdgeInsets.only(
+                                                right: 16.0),
                                             child: Text(
-                                              '${NumberFormat('#,###').format(item['totalPrice'])}원',
+                                              '${NumberFormat('#,###').format(cartItem.totalPrice)}원',
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.bold,
@@ -166,7 +221,7 @@ class ShoppingCart extends StatelessWidget {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withValues(red: 128, green: 128, blue: 128, alpha: 51),
                   spreadRadius: 1,
                   blurRadius: 4,
                   offset: const Offset(0, -1),
@@ -191,7 +246,7 @@ class ShoppingCart extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(right: 16.0),
                       child: Text(
-                        '${NumberFormat('#,###').format(totalAmount)}원',
+                        '${NumberFormat('#,###').format(cartList.totalAmount)}원',
                         style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
@@ -205,15 +260,39 @@ class ShoppingCart extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) => const AlertDialog(
-                          title: Text('구매 완료'),
-                          content: Text('구매가 완료되었습니다.'),
-                        ),
-                      );
-                    },
+                    onPressed: cartItems.isEmpty
+                        ? null
+                        : () {
+                            purchaseList.addPurchases(
+                              cartItems.map((cartItem) => Purchase(
+                                product: cartItem.product,
+                                quantity: cartItem.quantity,
+                              )).toList(),
+                            );
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('구매 완료'),
+                                content: const Text('구매가 완료되었습니다.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      cartList.clear();
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => PurchaseHistory(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('확인'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -236,17 +315,6 @@ class ShoppingCart extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _quantityBox(IconData icon) {
-    return Container(
-      height: 24,
-      width: 24,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Icon(icon, size: 14),
     );
   }
 }

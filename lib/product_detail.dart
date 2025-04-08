@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_buybye/models/product_type.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_buybye/shopping_cart.dart';
 import 'package:intl/intl.dart';
@@ -99,6 +99,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     '${NumberFormat('#,###').format(product.price)}원',
                     style: const TextStyle(fontSize: 20, color: Colors.black),
                   ),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -148,6 +149,28 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                   const SizedBox(height: 20),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text(
+                        '총 금액',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Text(
+                        '${NumberFormat('#,###').format(product.price * quantity)}원',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
@@ -157,7 +180,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               listen: false,
                             );
                             cartList.addItem(
-                              product as Product,
+                              product,
                               quantity: quantity,
                             );
                             showDialog(
@@ -186,7 +209,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                                     listen: false,
                                                   );
                                               cartList.addItem(
-                                                product as Product,
+                                                product,
                                                 quantity: quantity,
                                               );
                                               return const ShoppingCart();
@@ -223,7 +246,7 @@ class _ProductDetailState extends State<ProductDetail> {
                               listen: false,
                             );
                             cartList.addItem(
-                              product as Product,
+                              product,
                               quantity: quantity,
                             );
                             Navigator.push(
